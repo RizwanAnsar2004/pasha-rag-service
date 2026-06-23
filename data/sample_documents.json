@@ -1,0 +1,19 @@
+{
+  "documents": [
+    {
+      "id": "policy-refund",
+      "text": "Acme Corp offers a 30-day money-back guarantee on all hardware products. Refunds are processed within 5 business days to the original payment method.",
+      "metadata": { "category": "policy" }
+    },
+    {
+      "id": "policy-shipping",
+      "text": "Standard shipping takes 3-5 business days. Express shipping (1-2 business days) is available for an additional $15. Acme ships to the US and Canada only.",
+      "metadata": { "category": "policy" }
+    },
+    {
+      "id": "product-widget",
+      "text": "The Acme Widget Pro weighs 1.2 kg, supports Bluetooth 5.2, and has a battery life of 18 hours on a single charge.",
+      "metadata": { "category": "product" }
+    }
+  ]
+}

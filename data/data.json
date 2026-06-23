@@ -1,0 +1,526 @@
+{
+  "organization": "Pakistan Software Houses Association for IT and ITeS (P@SHA)",
+  "official_website": "https://www.pasha.org.pk",
+  "data_extracted_date": "2026-06-23",
+  "data_source": "Official P@SHA Website – https://www.pasha.org.pk",
+
+  "introduction": {
+    "source_url": "https://www.pasha.org.pk/about-pasha/",
+    "full_name": "Pakistan Software Houses Association for IT and IT Enabled Services",
+    "abbreviation": "P@SHA",
+    "founded": "1992",
+    "type": "Trade Association / Industry Body",
+    "tagline": "Pakistan IT Industry Association",
+    "description": "P@SHA was formed in 1992 by a number of software and IT companies to create a functional trade association for the IT industry of Pakistan. The primary aim of the association was to form a strong cluster of IT and IT enabled companies that can lobby with the government to develop policies and initiatives that will encourage the development of the IT industry and attract more member companies to join the industry.",
+    "current_status": "Over 1600+ members strong, remains the only National IT Association in Pakistan.",
+    "pillars": [
+      "Industry Engagement",
+      "Government Relations",
+      "Brand and Global Outreach",
+      "Skill and Capacity Development"
+    ],
+    "role": "P@SHA acts as the voice of the IT industry. It provides input on policies, legislation and incentives, sponsors career events and salary surveys, and promotes Pakistan's IT industry internationally through trade and technical delegations.",
+    "recognition": "P@SHA has gained international recognition by having won several awards in the Asia Pacific ICT awards.",
+    "legal_structure": "Company Limited by Guarantee under the Companies Act, 2007"
+  },
+
+  "chairman_message": {
+    "source_url": "https://www.pasha.org.pk/about-pasha/chairmans-message/",
+    "chairman_name": "Sajjad Syed",
+    "title": "Chairman, P@SHA",
+    "message_summary": "P@SHA serves as a vital hub for innovation, collaboration, and advocacy in Pakistan's burgeoning technology sector. The association engages with key government stakeholders including Ministry of Finance, Commerce, FBR, SIFC, Foreign Affairs, PTA, HEC, Planning, Youth, NAVTTC, PSEB, and MOITT. The goal is to position P@SHA as a global thought leader in the tech space and implement a comprehensive brand management framework."
+  },
+
+  "contact_information": {
+    "source_url": "https://www.pasha.org.pk/contact-us/",
+    "secretariat": {
+      "address": "Daftarkhwan Vanguard, 5-A Constitution Avenue, F-5/1, F-5, Islamabad",
+      "phone_1": "+92-51-8736624",
+      "phone_2": "+92-51-8736625",
+      "email": "secretariat@pasha.org.pk"
+    },
+    "regional_offices": [
+      {
+        "region": "Center (Lahore)",
+        "address": "Daftarkhwan Downtown, Mateen Fatima Rd Block, Gulberg, Lahore",
+        "phone_1": "+92-51-8736624",
+        "phone_2": "+92-51-8736625",
+        "email": "secretariat@pasha.org.pk"
+      },
+      {
+        "region": "South (Karachi)",
+        "address": "122b NASTP Silicon, Special Technology Zone, Fa isal Cantonment Board, Shahrah-e-Faisal, Karachi",
+        "phone_1": "+92-51-8736624",
+        "phone_2": "+92-51-8736625",
+        "email": "services@pasha.org.pk"
+      }
+    ],
+    "helpdesk_email": "helpdesk@pasha.org.pk",
+    "mobile": "+92-3104265454 / +923164265454"
+  },
+
+  "social_media": {
+    "facebook": "https://www.facebook.com/pakict",
+    "twitter_x": "https://x.com/PASHAORG",
+    "youtube": "https://www.youtube.com/@pakict",
+    "linkedin": "https://www.linkedin.com/company/pashapk"
+  },
+
+  "membership": {
+    "apply_membership": {
+      "source_url": "https://www.pasha.org.pk/apply-membership/",
+      "how_to_join": [
+        "Step 1: Fill the membership form at https://www.pasha.org.pk/membership-form/",
+        "Step 2: Pay the membership fee",
+        "Step 3: Submit proof of filing taxes"
+      ],
+      "eligibility_criteria": [
+        "A business concern engaged in software development, information technology services and IT-enabled services",
+        "A company that has IT or ITeS as their primary business (IT revenue of more than 60%)",
+        "Must have a registered place of business in Pakistan"
+      ],
+      "membership_types": [
+        {
+          "type": "Associate Member",
+          "criteria": "Companies with an annual turnover less than PKR 50 Million",
+          "registration_fee": "PKR 5,000 (One-time Payment)",
+          "annual_fee": "PKR 20,000"
+        },
+        {
+          "type": "Corporate Member",
+          "criteria": "Companies with an annual turnover of PKR 50 Million or above",
+          "registration_fee": "PKR 5,000 (One-time Payment)",
+          "annual_fee": "PKR 50,000"
+        }
+      ],
+      "processing_duration": {
+        "regular": "10 - 14 Working Days (provided all requirements are fulfilled)",
+        "urgent": "02 Working Days (provided all requirements are fulfilled). Additional fee of PKR 5,000 charged."
+      }
+    },
+    "membership_benefits": {
+      "source_url": "https://www.pasha.org.pk/membership-benefits/",
+      "tagline": "Join Pakistan's Sole Authorized & Globally Recognized IT Industry Trade Association",
+      "benefits": [
+        {
+          "title": "Protect Your Rights",
+          "description": "P@SHA advocates on behalf of its members with government and regulatory bodies. As the sole authorized representative of the IT industry, it acts as the voice of the industry. Members can avail direct access and input into policy decisions that shape how IT business is conducted within Pakistan."
+        },
+        {
+          "title": "Lead with Confidence",
+          "description": "P@SHA members have access to a digital data backbone of premium research and analysis on the latest trends and developments in the IT industry."
+        },
+        {
+          "title": "Find Your Tribe",
+          "description": "P@SHA provides networking opportunities to its members to interact with fellow businesses, potential partners, IT professionals, and government officials. Members can participate in exclusive events, conferences, and seminars."
+        },
+        {
+          "title": "Train Your Team, For Less",
+          "description": "Access to industry-standard and world-class training and development programs, including certification programs, workshops, and mentorship opportunities – at special discounted rates, exclusively for members only."
+        },
+        {
+          "title": "Go Beyond Borders",
+          "description": "P@SHA members receive firsthand invitations to become part of official delegations taking Pakistani tech beyond borders. From direct liaisons with various embassies to exclusive opportunities to meet visiting foreign stakeholders."
+        },
+        {
+          "title": "Be Recognized for Excellence",
+          "description": "P@SHA members can highlight their achievements through the P@SHA website, newsletters, and social media platforms including various awards and recognition opportunities."
+        }
+      ]
+    },
+    "discounts": {
+      "source_url": "https://www.pasha.org.pk/membership-benefits/partners-details/",
+      "partner_discounts": [
+        "5% discount on All Private offices on all CoSpace Karachi Locations",
+        "50% on Annual Subscription & on implementation and Training charges",
+        "Up to 40% on Healthcare & Lifecare Benefits; Special Rates for Travel & Car Insurance",
+        "Flat 50% on Recruitment Bot and Career Counselling services",
+        "Exclusive Discounts on Global Payments Solutions",
+        "Flat 40% off on Multinet Services and products",
+        "30% off on DK facilities across Pakistan",
+        "Additional discounted rates for travelling, entertainment and accommodations all over Pakistan",
+        "Flat 10% on all services and products offered by Viper Technology"
+      ]
+    },
+    "hotel_discounts": {
+      "source_url": "https://www.pasha.org.pk/membership-benefits/hotels/",
+      "inquiry_email": "services@pasha.org.pk",
+      "karachi": ["Movenpick", "Regent Hotel", "Sunset BnB", "Sunset Club", "Zifan Hotel", "Ramada Plaza", "Avari Hotels"],
+      "lahore": ["The Nishat Hotel", "Faletti's Hotel", "Hotel One", "Avari Xpress", "Luxus Grand"],
+      "islamabad": ["Sintra Hotel", "Jacaranda Club DHA – Phase 2", "Grand Hotel", "Roomy Signature Hotels", "Margala Hotel", "Serena Hotel", "IFQ Hotel", "Pearl Continental", "Ambiance The Vibe", "Marriot"]
+    }
+  },
+
+  "faqs": {
+    "source_url": "https://www.pasha.org.pk/apply-membership/",
+    "category": "Membership FAQ",
+    "questions_and_answers": [
+      {
+        "question": "How Long Is The Membership For?",
+        "answer": "A P@SHA membership is granted for one (01) year and expires on March 31st of each year, irrespective of the date the membership was originally granted."
+      },
+      {
+        "question": "Can A Company Have More Than One Membership?",
+        "answer": "One membership represents one company. No individual firm or company is allowed to hold more than one membership."
+      },
+      {
+        "question": "Can A Membership Be Transferred?",
+        "answer": "No, membership cannot be transferred to anyone else. However, if the member undergoes a change in legal status (e.g., merger, acquisition), the case may be reviewed by the secretariat."
+      },
+      {
+        "question": "What Is The Difference In Benefits For Corporate & Associate Members?",
+        "answer": "None! The two categories exist to allow representation from both small as well as large companies. All members enjoy the same benefits regardless of category."
+      },
+      {
+        "question": "Where Can I Learn More About P@SHA Membership Rules?",
+        "answer": "You can learn more about the rules governing P@SHA memberships in Articles 2, 3, 4, 5 and 6 of P@SHA's Articles of Association at https://www.pasha.org.pk/association-details/"
+      },
+      {
+        "question": "Who Can Become A P@SHA Member?",
+        "answer": "To become a P@SHA member you must be: (1) a business concern engaged in software development, information technology services and IT-enabled services, and/or (2) a company that has IT or ITeS as their primary business with IT revenue of more than 60%, with a registered place of business in Pakistan."
+      },
+      {
+        "question": "What is the processing time for membership?",
+        "answer": "Regular Processing takes 10–14 working days. Urgent Processing takes 02 working days, subject to an additional fee of PKR 5,000."
+      },
+      {
+        "question": "What are the membership fees?",
+        "answer": "For both types, the one-time Registration Fee is PKR 5,000. The Annual Fee is PKR 20,000 for Associate Members (turnover < PKR 50 million) and PKR 50,000 for Corporate Members (turnover ≥ PKR 50 million)."
+      }
+    ]
+  },
+
+  "general_inquiry": {
+    "source_url": "https://www.pasha.org.pk/contact-us/",
+    "description": "For general inquiries, P@SHA can be reached via the contact form on the official website or directly via email and phone.",
+    "contact_form_url": "https://www.pasha.org.pk/contact-us/",
+    "general_email": "secretariat@pasha.org.pk",
+    "services_email": "services@pasha.org.pk",
+    "helpdesk_email": "helpdesk@pasha.org.pk",
+    "election_commission_email": "electioncommission@pasha.org.pk",
+    "phone": "+92-51-8736624 / +92-51-8736625",
+    "membership_form_url": "https://www.pasha.org.pk/membership-form/",
+    "join_pasha_url": "https://www.pasha.org.pk/membership-form/"
+  },
+
+  "industry_overview": {
+    "source_url": "https://www.pasha.org.pk/industry-overview/",
+    "exports": {
+      "total_fy2020": "$2.1 Billion",
+      "yoy_growth": "18%",
+      "data_source": "State Bank of Pakistan (SBP)"
+    },
+    "pakistan_it_stats": {
+      "total_population": "227.3 million",
+      "mobile_phone_subscribers": "175.62 million",
+      "internet_users": "82.90 million",
+      "facebook_users": "43.55 million",
+      "twitter_users": "3.4 million",
+      "linkedin_users": "7.6 million",
+      "it_graduates_per_year": "25,000+"
+    },
+    "industry_size": {
+      "estimated_size": "$280 billion",
+      "gdp_contribution": "4.8%",
+      "export_revenue": "$2.1 billion",
+      "domestic_revenue": "$1.2 billion",
+      "it_companies": "12,000+",
+      "it_remittance_growth": "1024% over the past decade through banking channel"
+    },
+    "freelancing_rankings": {
+      "freelancer_com": "3rd globally",
+      "upwork_com": "5th globally"
+    },
+    "industry_scope": [
+      "Freelancing", "Animations", "Software Development", "Mobile App Development",
+      "Website Development", "Billing", "Technical Support", "Tele-marketing",
+      "Consulting", "Medical Transcription", "System Integration"
+    ]
+  },
+
+  "governance": {
+    "association_details_url": "https://www.pasha.org.pk/association-details/",
+    "legal_act": "The Companies Act, 2007 (Company Limited by Guarantee)",
+    "membership_classes": [
+      {
+        "class": "Corporate Member",
+        "criteria": "Body corporate, multinational corporation, or sales-tax-registered business with annual turnover of Rs. 50 million or above"
+      },
+      {
+        "class": "Associate Member",
+        "criteria": "Business concern not meeting Corporate Member criteria, with annual turnover below Rs. 50 million"
+      }
+    ],
+    "membership_duration": "One year, expires on March 31st each year",
+    "executive_committee": {
+      "composition": "Chairman, Senior Vice Chairman, Vice Chairman, and up to 30 Executive Committee members",
+      "tenure": "Two years (50% retire every year)",
+      "office_bearer_tenure": "One year",
+      "quorum": "One-third of members",
+      "meeting_frequency": "At least once every two months"
+    },
+    "general_body": {
+      "description": "Supreme body of the Association with overall powers and control",
+      "meetings": "Twice a year, not six months apart",
+      "agm_quorum": "25% of members in person"
+    },
+    "election_rules_url": "https://www.pasha.org.pk/about-pasha/elections/"
+  },
+
+  "elections": {
+    "elections_page_url": "https://www.pasha.org.pk/about-pasha/elections/",
+    "elections_2024_url": "https://www.pasha.org.pk/election-2024/",
+    "governing_act": "Trade Organizations Act 2013 and Trade Organization's Rules 2013",
+    "eligibility_to_vote": [
+      "The member has completed two years of valid membership of P@SHA.",
+      "The member has fulfilled the conditions of membership and renewal.",
+      "The member has submitted the filled specimen card.",
+      "The proprietor, partner or director (or a representative not below the rank of General Manager) is eligible to vote if their name is registered with the Secretary-General and appears on the voters list."
+    ],
+    "election_commission_2024": [
+      {"name": "Dr. Aftab Maroof", "title": "Rector FAST NUCES, Islamabad"},
+      {"name": "Dr. Kashif Zafar", "title": "Professor and Head FAST NUCES, Lahore"},
+      {"name": "Mr. Talib S. Karim", "title": "President IoBM, Karachi"}
+    ],
+    "election_commission_email": "electioncommission@pasha.org.pk"
+  },
+
+  "secretariat_departments": {
+    "source_url": "https://www.pasha.org.pk/secretariat/",
+    "departments": [
+      "Secretary General",
+      "Industry Engagement",
+      "Policy Advocacy & Government Relations",
+      "Skills Development",
+      "Brand & Global Outreach",
+      "Operations"
+    ]
+  },
+
+  "sub_committees": {
+    "source_url": "https://www.pasha.org.pk/sub-committees/",
+    "categories": [
+      "Core Initiatives",
+      "Industry Sector Initiatives",
+      "Project Specific Initiatives",
+      "Special Initiatives"
+    ]
+  },
+
+  "publications": {
+    "industry_engagement": {
+      "source_url": "https://www.pasha.org.pk/publications-pillars/industry-engagement/",
+      "publications": [
+        {"title": "Driving Inclusive Growth in Pakistan's Tech Sector", "type": "Research Report"},
+        {"title": "P@SHA Diversity & Inclusion: IT & ITeS Landscape", "type": "Research Report", "date": "Jan 2023"},
+        {"title": "P@SHA Employee Benefit Analysis Survey Analysis 2022", "type": "Survey", "date": "Oct 2022"}
+      ]
+    },
+    "skills_development": {
+      "source_url": "https://www.pasha.org.pk/publications-pillars/skills-development/",
+      "publications": [
+        {"title": "Salary Survey 2024–2025", "type": "IT Salary Survey", "date": "Dec 2025"},
+        {"title": "The Future Skills for the IT Industry", "type": "Policy Paper", "date": "Dec 2025"},
+        {"title": "P@SHA Skills Report 2025: Insights into Pakistan's Top IT Skills In-Demand!", "date": "Aug 2025"},
+        {"title": "Building a Future-Ready Workforce", "type": "Policy Paper"},
+        {"title": "Digital Economy Skills Action Plan", "type": "Policy Paper"},
+        {"title": "Women Empowerment Through Technology", "type": "Policy Paper", "date": "May 2024"},
+        {"title": "Salary Survey Report 2023–24", "type": "IT Salary Survey"},
+        {"title": "IT Skills Survey 2023", "type": "IT Salary Survey", "date": "Dec 2023"},
+        {"title": "P@SHA Salary Benchmarking Quick Guide 2022", "type": "IT Salary Survey", "date": "Oct 2022"},
+        {"title": "Pakistan IT Skills Survey Report 2021"},
+        {"title": "IT Skills Requirement Analysis Report 2021"},
+        {"title": "P@SHA Salary Survey 2021"},
+        {"title": "P@SHA IT Salary Survey 2017"},
+        {"title": "P@SHA IT Salary Survey 2016"},
+        {"title": "P@SHA IT Salary Survey 2015"},
+        {"title": "P@SHA IT Salary Survey 2013"}
+      ]
+    },
+    "policy_advocacy": {
+      "source_url": "https://www.pasha.org.pk/publications-pillars/policy-advocacy/",
+      "publications": [
+        {"title": "Federal Budget 2026–27 Policy Recommendations", "date": "Apr 2026"},
+        {"title": "Boom of Fintech in Pakistan and the Role of RAAST", "type": "Policy Paper", "date": "Dec 2025"},
+        {"title": "GILGIT-BALTISTAN IT & ITES SECTOR DIAGNOSTIC REPORT", "type": "Research Report", "date": "Nov 2025"},
+        {"title": "AgriTech Frontiers: Scaling Smart Farming In Gilgit-Baltistan Implementation Roadmap", "type": "Policy Paper", "date": "Sep 2025"},
+        {"title": "Annual Budget Recommendations for 2025-26", "type": "Annual Report"},
+        {"title": "Agri-Tech Report 2024", "type": "Research Report", "date": "Dec 2024"},
+        {"title": "Enabling Pakistan's Digital Public Infrastructure Through the Private Sector", "type": "Policy Paper", "date": "Dec 2024"},
+        {"title": "Policy Jirga Whitepaper", "type": "Policy Paper"},
+        {"title": "Policy Position Paper and Legal Framework for Taxation on Remote Workers", "type": "Policy Paper"},
+        {"title": "Annual Budget Recommendations for 2024-25"},
+        {"title": "Bridging the Gender Gap in Entrepreneurship", "type": "Policy Paper"},
+        {"title": "Evaluating the Impact of Increased Retention Limits in ESFCAs on Pakistan's IT and ITeS Sector", "type": "Policy Paper", "date": "May 2024"},
+        {"title": "Budget Recommendations 2023: Unleashing the Potential of the IT & ITeS Sector", "type": "Policy Paper", "date": "Jun 2023"},
+        {"title": "Tax Analysis: Mapping Cost of Doing Business for IT & ITeS in Pakistan"},
+        {"title": "2022 Budget Recommendations", "date": "Jun 2022"},
+        {"title": "Comparative Analysis: Support Policies in IT Emerging Economies"}
+      ]
+    },
+    "governance": {
+      "source_url": "https://www.pasha.org.pk/publications-pillars/governance/",
+      "publications": [
+        {"title": "CEC Meeting Highlights – January 2025"},
+        {"title": "CCEC Meeting Highlights – January 2025"}
+      ]
+    },
+    "animation_gaming": {
+      "source_url": "https://www.pasha.org.pk/publications-pillars/animation-gaming/",
+      "publications": [
+        {"title": "WhitePaper: Past, Present, Future of Games & Animation", "type": "Animation & Gaming", "date": "Mar 2024"},
+        {"title": "Pakistan Animation, Graphics and Games Ecosystem Report 2022-23", "type": "Animation & Gaming", "date": "Nov 2023"}
+      ]
+    }
+  },
+
+  "media": {
+    "pasha_pulse": {
+      "source_url": "https://www.pasha.org.pk/pasha-pulse/",
+      "description": "P@SHA's monthly newsletter",
+      "issues": [
+        "P@SHA Pulse April 2026", "P@SHA Pulse March 2026", "P@SHA Pulse February 2026",
+        "P@SHA Pulse January 2026", "P@SHA Pulse December 2025", "P@SHA Pulse November 2025",
+        "P@SHA Pulse October 2025", "P@SHA Pulse September 2025", "P@SHA Pulse August 2025",
+        "P@SHA Pulse July 2025", "P@SHA Pulse June 2025", "P@SHA Pulse May 2025",
+        "P@SHA Pulse April 2025", "P@SHA Pulse March 2025", "P@SHA Pulse January 2025",
+        "P@SHA Pulse December 2024", "P@SHA Pulse November 2024", "P@SHA Pulse October 2024",
+        "P@SHA Pulse September 2024", "P@SHA Pulse August 2024", "P@SHA Pulse July 2024",
+        "P@SHA Pulse June 2024", "P@SHA Pulse May 2024", "P@SHA Pulse April 2024",
+        "P@SHA Pulse March 2024", "P@SHA Pulse February 2024", "P@SHA Pulse January 2024",
+        "P@SHA Pulse December 2023 (APICTA Special)", "P@SHA Pulse November 2023",
+        "P@SHA Pulse October 2023 (HBLPKICT Special)", "P@SHA Pulse August 2023",
+        "P@SHA Pulse July 2023", "P@SHA Pulse June 2023", "P@SHA Pulse May 2023",
+        "P@SHA Pulse April 2023", "P@SHA Pulse March 2023", "P@SHA Pulse Feb 2023",
+        "P@SHA Pulse Jan 2023", "P@SHA Pulse Dec 2022 (APICTA Special)", "P@SHA Pulse Nov 2022",
+        "P@SHA Pulse Oct 2022"
+      ]
+    },
+    "pasha_connect": {
+      "source_url": "https://www.pasha.org.pk/pasha-connect/",
+      "description": "P@SHA delegation reports from international events",
+      "issues": [
+        "P@SHA Connect – Gitex Morocco 2023",
+        "P@SHA Connect – GDC 2023",
+        "P@SHA CONNECT – LEAP 2023"
+      ]
+    },
+    "press_releases": {
+      "source_url": "https://www.pasha.org.pk/press-releases/",
+      "notable_releases": [
+        {
+          "title": "Call for Proposals: Hiring of Official PR Firm",
+          "date": "May 30, 2025",
+          "summary": "P@SHA invites proposals from qualified and experienced Public Relations (PR) firms for the role of Official PR firm."
+        },
+        {
+          "title": "IT COMPANIES AT RISK OF CLOSURES DUE TO VPN BLOCKAGES AND INTERNET SLOWDOWN",
+          "date": "Nov 19, 2024",
+          "summary": "P@SHA Chairman Sajjad Mustafa Syed warned that IT companies are at risk of closures due to VPN blockages and internet slowdown."
+        },
+        {
+          "title": "P@SHA's Official Statement on National Firewall",
+          "date": "Aug 15, 2024",
+          "summary": "P@SHA unequivocally condemns the grave consequences of the hastily implemented national firewall, warning it is causing disaster to the IT industry."
+        },
+        {
+          "title": "P@SHA, BTECH, and WorkSmart Join Forces to Organize MEET ICT Conference and BITEX Exhibition 2024",
+          "date": "Mar 13, 2024"
+        },
+        {
+          "title": "Suspension of Election Activities in Compliance with DGTO and IHC Orders",
+          "date": "Sep 13, 2023"
+        }
+      ]
+    }
+  },
+
+  "events": {
+    "global_events": {
+      "source_url": "https://www.pasha.org.pk/global-events/",
+      "upcoming_2026": [
+        {"name": "P@SHA Global Calendar 2026", "type": "Calendar", "date": "January 1, 2026"},
+        {"name": "TechEx 2026", "date": "May 18, 2026", "url": "https://www.pasha.org.pk/global-events/techex-2026/", "description": "TechEx North America 2026 at San Jose McEnery Convention Center, California, USA, May 18–19, 2026. Includes eight co-located technology forums covering AI & Big Data, Cyber Security, IoT, Digital Transformation, Intelligent Automation, Edge Computing, Cloud & Data Centres."},
+        {"name": "London Tech Week 2026", "date": "June 8, 2026", "url": "https://www.pasha.org.pk/global-events/london-tech-week-2026/", "description": "London Tech Week 2026 will be held from 8–12 June 2026 in London, United Kingdom."},
+        {"name": "GITEX Berlin 2026", "date": "June 30, 2026"},
+        {"name": "LEAP 2026", "date": "August 31, 2026"}
+      ]
+    },
+    "national_events": {
+      "source_url": "https://www.pasha.org.pk/national-events/",
+      "upcoming_2026": [
+        {"name": "P@SHA National Calendar 2026", "type": "Calendar", "date": "January 1, 2026"}
+      ]
+    }
+  },
+
+  "careers": {
+    "source_url": "https://www.pasha.org.pk/careers/",
+    "current_openings": [
+      {"title": "Policy & Government Affairs Associate", "type": "Full Time", "location": "Islamabad", "department": "Policy Advocacy & Government Relations", "level": "Entry Level (1-3 Years)"},
+      {"title": "Skills Development Intern", "type": "Internship", "location": "Islamabad", "department": "Learning & Development", "level": "Fresh Graduates (0-1 Years)"},
+      {"title": "Communications & Outreach Associate", "type": "Full Time", "location": "Islamabad / Lahore", "department": "Marketing & Communications", "level": "Entry Level (1-3 Years)"},
+      {"title": "Digital Media & Communications Associate", "type": "Full Time", "location": "Islamabad", "department": "Marketing & Communications", "level": "Entry Level (1-3 Years)"},
+      {"title": "Industry Engagement Associate", "type": "Full Time", "location": "Islamabad", "department": "Industry Engagement", "level": "Entry Level (1-3 Years)"},
+      {"title": "Director Industry Engagement", "type": "Full Time", "location": "Islamabad", "department": "Industry Engagement", "level": "Senior (6+ Years)"}
+    ]
+  },
+
+  "resources": {
+    "bank_facilitation": {
+      "source_url": "https://www.pasha.org.pk/designated-bank-branches-and-focal-bank-officers-for-the-facilitation-of-it-sector/",
+      "description": "List of designated bank branches and focal officers from respective banks, shared by the State Bank of Pakistan for facilitating IT sector. These branches and officers have comprehensive knowledge of FE regulations related to Exporters Special Foreign Currency Accounts (ESFCA) and e-PRCs.",
+      "downloads": [
+        {"name": "Focal-Persons-for-IT-Facilitation", "type": "PDF Download"},
+        {"name": "Dedicated-Bank-Branch-for-IT-facilitation", "type": "PDF Download"}
+      ]
+    }
+  },
+
+  "navigation_sitemap": {
+    "about_us": {
+      "about_pasha": "https://www.pasha.org.pk/about-pasha/",
+      "chairmans_message": "https://www.pasha.org.pk/about-pasha/chairmans-message/",
+      "association_details": "https://www.pasha.org.pk/association-details/",
+      "central_executive_committee": "https://www.pasha.org.pk/central-exective-committee/",
+      "sub_committees": "https://www.pasha.org.pk/sub-committees/",
+      "secretariat": "https://www.pasha.org.pk/secretariat/",
+      "partners": "https://www.pasha.org.pk/partners/",
+      "elections": "https://www.pasha.org.pk/about-pasha/elections/",
+      "elections_2024": "https://www.pasha.org.pk/election-2024/",
+      "careers": "https://www.pasha.org.pk/careers/"
+    },
+    "members": {
+      "membership_benefits": "https://www.pasha.org.pk/membership-benefits/",
+      "discounts": "https://www.pasha.org.pk/membership-benefits/partners-details/",
+      "hotels": "https://www.pasha.org.pk/membership-benefits/hotels/",
+      "apply_membership": "https://www.pasha.org.pk/apply-membership/",
+      "membership_form": "https://www.pasha.org.pk/membership-form/",
+      "renew_membership": "https://www.pasha.org.pk/renew-membership/",
+      "members_directory": "https://www.pasha.org.pk/members-directory/"
+    },
+    "publications": {
+      "industry_engagement": "https://www.pasha.org.pk/publications-pillars/industry-engagement/",
+      "skills_development": "https://www.pasha.org.pk/publications-pillars/skills-development/",
+      "governance": "https://www.pasha.org.pk/publications-pillars/governance/",
+      "policy_advocacy": "https://www.pasha.org.pk/publications-pillars/policy-advocacy/",
+      "industry_overview": "https://www.pasha.org.pk/industry-overview/",
+      "animation_gaming": "https://www.pasha.org.pk/publications-pillars/animation-gaming/"
+    },
+    "media": {
+      "pasha_pulse": "https://www.pasha.org.pk/pasha-pulse/",
+      "pasha_connect": "https://www.pasha.org.pk/pasha-connect/",
+      "pasha_candid": "https://www.pasha.org.pk/pasha-candid/",
+      "press_releases": "https://www.pasha.org.pk/press-releases/",
+      "featured_articles": "https://www.pasha.org.pk/featured-articles/",
+      "news": "https://www.pasha.org.pk/news/",
+      "picture_gallery": "https://www.pasha.org.pk/picture-gallery/"
+    },
+    "events": {
+      "global_events": "https://www.pasha.org.pk/global-events/",
+      "national_events": "https://www.pasha.org.pk/national-events/"
+    },
+    "contact": "https://www.pasha.org.pk/contact-us/",
+    "join_pasha": "https://www.pasha.org.pk/membership-form/"
+  }
+}
