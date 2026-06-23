@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from functools import lru_cache
 
 from openai import OpenAI
@@ -45,6 +46,34 @@ REFUSAL_NO_CONTEXT = (
     "I don't have enough information in the provided context to answer that."
 )
 
+# Lightweight small-talk handling. These are answered with a fixed, friendly
+# reply BEFORE retrieval so the assistant is never rude to a greeting — but it
+# never invents facts about the platform.
+GREETING_REPLY = (
+    "Hi! \U0001F44B I'm the P@SHA assistant. I can help with questions about "
+    "P@SHA, its membership, how to sign up, member benefits, events, careers, "
+    "and how to get in touch. What would you like to know?"
+)
+THANKS_REPLY = "You're welcome! Feel free to ask me anything about P@SHA."
+
+_GREETING_RE = re.compile(
+    r"^\W*(hi|hello|hey|hiya|yo|greetings|good\s+(morning|afternoon|evening)|"
+    r"a?ss?alam[ou\s]*o?\s*[ou]?\s*alaikum|salaam|salam|"
+    r"hello\s+pasha|hi\s+pasha)\b"
+    r"[\s!.,]*(pasha|there|everyone|team)?[\s!.,]*$",
+    re.I,
+)
+_THANKS_RE = re.compile(r"^\W*(thanks|thank\s+you|thankyou|thx|shukria|cheers)\b[\s!.,]*$", re.I)
+
+
+def _small_talk_reply(text: str) -> str | None:
+    """Return a canned reply for greetings/thanks, else None."""
+    if _GREETING_RE.match(text):
+        return GREETING_REPLY
+    if _THANKS_RE.match(text):
+        return THANKS_REPLY
+    return None
+
 
 def _build_user_message(question: str, chunks: list[SourceChunk]) -> str:
     blocks = []
@@ -87,6 +116,17 @@ def answer_question(question: str, top_k: int | None = None) -> QueryResponse:
         )
 
     clean_question = guard.sanitized
+
+    # 1b. Greetings / light small-talk — reply politely without retrieval.
+    small_talk = _small_talk_reply(clean_question)
+    if small_talk is not None:
+        return QueryResponse(
+            answer=small_talk,
+            grounded=False,
+            refused=False,
+            reason=None,
+            sources=[],
+        )
 
     # 2. Retrieve.
     embedding = embed_query(clean_question)
