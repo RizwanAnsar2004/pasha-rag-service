@@ -235,10 +235,31 @@ def _answer_lines(answers: object) -> list[str]:
     return out
 
 
+# Profile columns folded INTO the embedded text (not just metadata) so even a
+# sparse record — one with no idea/business-model write-up — still carries a few
+# real facts the assistant can answer from (sector, location, stage, etc.).
+_PROFILE_COLUMNS = [
+    ("primary_industry", "Sector"),
+    ("secondary_industries", "Also operates in"),
+    ("product_stage", "Product stage"),
+    ("city", "City"),
+    ("hq_country", "Country"),
+    ("nic_name", "Incubation center"),
+    ("incubation_stage", "Incubation stage"),
+    ("cohort", "Cohort"),
+    ("website", "Website"),
+]
+
+
 def build_text(row: dict) -> str:
     """Assemble the embedded, public-facing text block for a databank row."""
     lines: list[str] = []
     for col, label in _CONTENT_COLUMNS:
+        val = _strip_html(row.get(col))
+        if val:
+            lines.append(f"{label}: {val}")
+
+    for col, label in _PROFILE_COLUMNS:
         val = _strip_html(row.get(col))
         if val:
             lines.append(f"{label}: {val}")
