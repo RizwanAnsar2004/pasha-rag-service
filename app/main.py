@@ -2,17 +2,23 @@
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import Depends, FastAPI, Header, HTTPException, status
 
-from . import vectorstore
+from . import databank, vectorstore
 from .config import get_settings
 from .rag import answer_question
 from .schemas import (
+    DatabankEvent,
+    DatabankSyncResponse,
     IngestRequest,
     IngestResponse,
     QueryRequest,
     QueryResponse,
 )
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Secure RAG Service",
@@ -56,3 +62,37 @@ def ingest(req: IngestRequest) -> IngestResponse:
 @app.post("/query", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
 def query(req: QueryRequest) -> QueryResponse:
     return answer_question(req.question, req.top_k)
+
+
+@app.post("/databank/event", dependencies=[Depends(require_api_key)])
+def databank_event(event: DatabankEvent) -> dict[str, object]:
+    """Databank change sink — re-syncs the affected row from the source of truth
+    (the payload is never trusted for content).
+
+    Returns 200 on success and on an unactionable payload (no id — retrying
+    won't help). On a *genuine* sync failure (e.g. Supabase/OpenAI hiccup) it
+    raises 500 so the caller's bounded retry kicks in and the row still lands —
+    keeping ingestion reliable on every approve/edit."""
+    row_id = event.row_id()
+    if not row_id:
+        return {"ok": False, "reason": "no row id in payload"}
+    try:
+        action = databank.sync_row(row_id)
+        return {"ok": True, "id": row_id, "action": action}
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("databank event sync failed for %s", row_id)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"sync failed for {row_id}: {exc}",
+        ) from exc
+
+
+@app.post(
+    "/databank/sync",
+    response_model=DatabankSyncResponse,
+    dependencies=[Depends(require_api_key)],
+)
+def databank_sync() -> DatabankSyncResponse:
+    """Full backfill + reconcile of the databank table into the vector store."""
+    result = databank.sync_all()
+    return DatabankSyncResponse(**result)

@@ -34,12 +34,21 @@ class Settings(BaseSettings):
     chroma_path: str = Field(default="./data/chroma", alias="CHROMA_PATH")
     collection_name: str = Field(default="documents", alias="COLLECTION_NAME")
 
+    # --- Supabase (Pasha databank source of truth) ---
+    # Used to pull fresh databank rows when syncing them into the vector store.
+    supabase_url: str = Field(default="", alias="SUPABASE_URL")
+    supabase_service_role_key: str = Field(
+        default="", alias="SUPABASE_SERVICE_ROLE_KEY"
+    )
+
     # --- Retrieval / guardrails ---
     top_k: int = Field(default=4, alias="TOP_K")
     # Chroma returns cosine *distance* (0 = identical, 2 = opposite). We refuse to
     # answer when the best match is farther than this threshold — i.e. nothing in
-    # the corpus is relevant enough to ground an answer.
-    max_distance: float = Field(default=0.75, alias="MAX_DISTANCE")
+    # the corpus is relevant enough to ground an answer. Set a touch loose so
+    # small wording changes (casing, synonyms, partial names) still retrieve;
+    # the model's own grounding check is the second line of defence.
+    max_distance: float = Field(default=0.85, alias="MAX_DISTANCE")
 
     # Simple API-key gate for the service itself (separate from Anthropic's key).
     service_api_key: str = Field(default="", alias="SERVICE_API_KEY")

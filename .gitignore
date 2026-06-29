@@ -5,3 +5,4 @@ __pycache__/
 data/chroma/
 .venv/
 venv/
+README.md

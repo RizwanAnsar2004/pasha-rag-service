@@ -139,7 +139,9 @@ def test_query_out_of_context_is_refused(client):
     body = resp.json()
     assert body["refused"] is True
     assert body["grounded"] is False
-    assert "don't have enough information" in body["answer"].lower()
+    # Friendly refusal shown to the user (not the raw internal sentinel).
+    assert "sorry" in body["answer"].lower()
+    assert "don't have enough information" not in body["answer"].lower()
 
 
 def test_query_injection_is_blocked_before_model(client):

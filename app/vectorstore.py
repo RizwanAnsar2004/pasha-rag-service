@@ -81,3 +81,34 @@ def query(question_embedding: list[float], top_k: int) -> list[SourceChunk]:
 
 def count() -> int:
     return _collection().count()
+
+
+def delete_ids(ids: list[str]) -> int:
+    """Remove documents by id. Returns the number requested for deletion."""
+    if not ids:
+        return 0
+    _collection().delete(ids=ids)
+    return len(ids)
+
+
+def get_meta(doc_id: str) -> dict | None:
+    """Return the stored metadata for a single id, or None if absent."""
+    result = _collection().get(ids=[doc_id], include=["metadatas"])
+    metas = result.get("metadatas") or []
+    if not metas:
+        return None
+    return metas[0] or {}
+
+
+def list_ids(where: dict | None = None) -> list[str]:
+    """List stored ids, optionally filtered by a metadata `where` clause."""
+    result = _collection().get(where=where, include=[])
+    return list(result.get("ids") or [])
+
+
+def update_meta(doc_id: str, metadata: dict) -> None:
+    """Update only the metadata of an existing document (no re-embedding).
+
+    Used when a row's embedded text is unchanged but its metadata moved (e.g.
+    a verification toggle) — avoids paying for a fresh embedding."""
+    _collection().update(ids=[doc_id], metadatas=[metadata or {"_source": "ingest"}])

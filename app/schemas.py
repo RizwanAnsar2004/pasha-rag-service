@@ -32,6 +32,35 @@ class IngestResponse(BaseModel):
     total_in_collection: int
 
 
+class DatabankEvent(BaseModel):
+    """Supabase Database Webhook payload for the `databank` table.
+
+    Supabase posts `{ type, table, schema, record, old_record }`. We only need
+    the row id (and the event type to distinguish deletes); the row is re-fetched
+    from Supabase as the source of truth rather than trusting `record`."""
+
+    type: str = Field(..., description="INSERT | UPDATE | DELETE")
+    table: str | None = None
+    record: dict[str, Any] | None = None
+    old_record: dict[str, Any] | None = None
+
+    def row_id(self) -> str | None:
+        """The affected row id, from the new record or (on delete) the old one."""
+        for src in (self.record, self.old_record):
+            if src and src.get("id"):
+                return str(src["id"])
+        return None
+
+
+class DatabankSyncResponse(BaseModel):
+    upserted: int
+    deleted: int
+    skipped: int = Field(
+        default=0, description="Rows whose embedded text was unchanged."
+    )
+    total_in_collection: int
+
+
 class QueryRequest(BaseModel):
     question: str = Field(..., min_length=1, max_length=4000)
     top_k: int | None = Field(default=None, ge=1, le=20)
