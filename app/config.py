@@ -42,7 +42,12 @@ class Settings(BaseSettings):
     )
 
     # --- Retrieval / guardrails ---
-    top_k: int = Field(default=4, alias="TOP_K")
+    # 8, not 4: the website corpus puts several near-duplicate chunks (taxonomy
+    # archives, repeated press releases) above the one page that actually answers
+    # a role question, so the right chunk lands around rank 6. Measured with
+    # `scripts.eval_coverage` — 4 scores 91%, 8 scores 97%, with no loss of
+    # refusals on the negative controls.
+    top_k: int = Field(default=8, alias="TOP_K")
     # Chroma returns cosine *distance* (0 = identical, 2 = opposite). We refuse to
     # answer when the best match is farther than this threshold — i.e. nothing in
     # the corpus is relevant enough to ground an answer. The model's own grounding
