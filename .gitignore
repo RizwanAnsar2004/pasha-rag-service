@@ -2,7 +2,7 @@
 __pycache__/
 *.pyc
 .pytest_cache/
-data/chroma/
 .venv/
 venv/
 README.md
+pasha_pages

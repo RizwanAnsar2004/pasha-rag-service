@@ -82,6 +82,34 @@ Response:
 
 Returns service status and the document count.
 
+## Scraping pasha.org.pk
+
+`scripts/scrape_site.py` builds the website corpus. It runs in two phases so a
+crawl can be reviewed before it costs anything to embed:
+
+```bash
+python -m scripts.scrape_site              # crawl -> data/pasha_site.json + data/pasha_pages/
+python -m scripts.scrape_site --ingest     # crawl, then embed into Chroma
+python -m scripts.scrape_site --ingest-only  # embed an existing crawl
+python -m scripts.scrape_site --limit 20   # small trial run
+```
+
+URLs come from the site's Yoast sitemap index (452 of them). Three sources are
+combined, because the HTML alone is not the whole site:
+
+1. **Page HTML** — the main content of every page, chunked with overlap.
+2. **AJAX rosters** — the Central Executive Committee (per term), Secretariat
+   and Sub Committee listings are client-rendered; their pages arrive as empty
+   shells, so the crawler posts to `admin-ajax.php` exactly as the browser does.
+   Without this the entire leadership roster is missing from the corpus.
+3. **WordPress REST API** — fills remaining gaps and builds an index document
+   per post type (partners, Pulse editions, galleries) whose detail pages carry
+   no server-rendered text.
+
+`data/pasha_pages/*.txt` holds the complete text of each page, one file per
+page — the readable record of what was captured, since the vector store only
+ever holds chunks.
+
 ## Configuration
 
 All settings come from environment variables / `.env` (see `.env.example`):
