@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import logging
 
-from fastapi import Depends, FastAPI, Header, HTTPException, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Request, status
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
 from . import databank, vectorstore
 from .config import get_settings
@@ -20,6 +23,22 @@ from .schemas import (
 
 logger = logging.getLogger(__name__)
 
+
+def _client_key(request: Request) -> str:
+    """Identify the caller for rate limiting.
+
+    nginx sits in front of this service (deploy/nginx.conf), so `request.client`
+    is always 127.0.0.1 — using it directly would put every caller in the world
+    into one shared bucket. X-Forwarded-For's first entry is the original client.
+    """
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return get_remote_address(request)
+
+
+limiter = Limiter(key_func=_client_key)
+
 app = FastAPI(
     title="Secure RAG Service",
     version="0.1.0",
@@ -29,6 +48,10 @@ app = FastAPI(
         "out-of-context answering."
     ),
 )
+
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 def require_api_key(x_api_key: str | None = Header(default=None)) -> None:
@@ -60,7 +83,8 @@ def ingest(req: IngestRequest) -> IngestResponse:
 
 
 @app.post("/query", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
-def query(req: QueryRequest) -> QueryResponse:
+@limiter.limit("5/hour")
+def query(request: Request, req: QueryRequest) -> QueryResponse:
     return answer_question(req.question, req.top_k)
 
 
