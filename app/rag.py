@@ -186,7 +186,8 @@ def answer_question(question: str, top_k: int | None = None) -> QueryResponse:
     user_message = _build_user_message(clean_question, relevant)
     response = _client().chat.completions.create(
         model=settings.generation_model,
-        max_tokens=settings.max_tokens,
+        # gpt-5.x rejects `max_tokens`; the budget is `max_completion_tokens`.
+        max_completion_tokens=settings.max_tokens,
         temperature=0.0,
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
