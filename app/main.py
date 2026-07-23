@@ -83,7 +83,7 @@ def ingest(req: IngestRequest) -> IngestResponse:
 
 
 @app.post("/query", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
-@limiter.limit("5/hour")
+@limiter.limit("5/minute")
 def query(request: Request, req: QueryRequest) -> QueryResponse:
     return answer_question(req.question, req.top_k)
 
