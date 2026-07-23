@@ -64,6 +64,22 @@ class DatabankSyncResponse(BaseModel):
 class QueryRequest(BaseModel):
     question: str = Field(..., min_length=1, max_length=4000)
     top_k: int | None = Field(default=None, ge=1, le=20)
+    # Deliberately unconstrained: both are opaque client metadata, and a
+    # malformed one must not cost the caller their answer. Length is enforced
+    # where each is actually used (see MAX_SESSION_ID_LEN in app.main), which
+    # degrades to the IP bucket instead of returning 422.
+    session_id: str | None = Field(
+        default=None,
+        description=(
+            "Caller's conversation id, used as the rate-limit bucket. Sent in "
+            "the body rather than a header so proxies can't strip it. Falls "
+            "back to the client IP when absent or unusable."
+        ),
+    )
+    request_id: str | None = Field(
+        default=None,
+        description="Per-query id for correlating logs across services.",
+    )
 
 
 class SourceChunk(BaseModel):

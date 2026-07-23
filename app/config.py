@@ -61,6 +61,25 @@ class Settings(BaseSettings):
     # Simple API-key gate for the service itself (separate from Anthropic's key).
     service_api_key: str = Field(default="", alias="SERVICE_API_KEY")
 
+    # --- Rate limiting (/query) ---
+    # Primary bucket: the caller's session_id, so one visitor's questions are
+    # counted together and separately from everyone else's. Keyed on the IP only
+    # when no session id was sent.
+    query_rate_limit: str = Field(default="5/minute", alias="QUERY_RATE_LIMIT")
+    # Backstop bucket: the client IP, which still holds when someone rotates
+    # session ids to escape the limit above. Deliberately looser — several
+    # people can share one NAT/office IP, so this must not be the binding
+    # constraint for ordinary use.
+    #
+    # Two windows, because one can't do both jobs: 60/minute absorbs a burst
+    # from a busy shared address (12x the per-session rate), while 500/hour caps
+    # what a session-id-rotating caller can actually spend — without it, the
+    # minute window alone would permit 3,600 generated answers an hour from one
+    # address. Multiple limits are `;` separated.
+    query_ip_rate_limit: str = Field(
+        default="60/minute;500/hour", alias="QUERY_IP_RATE_LIMIT"
+    )
+
     @property
     def auth_enabled(self) -> bool:
         return bool(self.service_api_key)
