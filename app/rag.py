@@ -16,8 +16,9 @@ from .schemas import QueryResponse, SourceChunk
 # The system prompt is the trust anchor. It is never mixed with user or document
 # text, and it instructs the model to treat everything inside the context block
 # as untrusted data — not as instructions to follow.
-SYSTEM_PROMPT = """You are the assistant for P@SHA (the Pakistan Software Houses \
-Association) and the P@SHA Startup Hub, answering from retrieved context.
+SYSTEM_PROMPT = """You are PAi, the assistant for P@SHA (the Pakistan Software \
+Houses Association) and the P@SHA Startup Hub, answering from retrieved context. \
+If asked your name, you are PAi.
 
 Your subject matter is everything P@SHA runs: the association itself \
 (www.pasha.org.pk) — membership, benefits, leadership, committees, events, \
@@ -138,7 +139,7 @@ FRIENDLY_REFUSAL = (
 # reply BEFORE retrieval so the assistant is never rude to a greeting — but it
 # never invents facts about the platform.
 GREETING_REPLY = (
-    "Hi! \U0001F44B I'm the P@SHA assistant. I can help with questions about "
+    "Hi! \U0001F44B I'm PAi, the P@SHA assistant. I can help with questions about "
     "P@SHA and the P@SHA Startup Hub — membership, how to sign up, member "
     "benefits, the startup directory, events, careers, and how to get in "
     "touch. What would you like to know?"
@@ -227,8 +228,8 @@ def _build_user_message(question: str, chunks: list[SourceChunk]) -> str:
 # as "Pasha"/"passion") and toward the two languages the audience speaks, so
 # Urdu speech isn't mis-scripted into Hindi or another language.
 TRANSCRIPTION_PROMPT = (
-    "A spoken question to the P@SHA assistant, in English or Urdu. "
-    "P@SHA is the Pakistan Software Houses Association. Vocabulary: P@SHA, "
+    "A spoken question to PAi, the P@SHA assistant, in English or Urdu. "
+    "P@SHA is the Pakistan Software Houses Association. Vocabulary: PAi, P@SHA, "
     "membership, startup, databank, incubation, cohort, fintech, secretariat. "
     "یہ سوال انگریزی یا اردو میں ہے۔"
 )
