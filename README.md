@@ -22,6 +22,12 @@ Gemini — with guardrails against prompt injection and out-of-context answering
      never as instructions, and refuses to reveal itself or answer beyond
      context.
 - **Optional API-key auth** on the service endpoints (`SERVICE_API_KEY`).
+- **Aggregate startup summaries.** Per-startup vectors can never answer count
+  questions ("how many categories are there?") because top-k retrieval only
+  surfaces a few profiles. After every databank sync, roll-up documents
+  (categories, cities, incubation centers, product stages, overview) are
+  rebuilt from the startup metadata in Chroma (`app/databank.py:sync_summaries`)
+  so those totals are retrievable like any other fact.
 
 ## Setup
 
@@ -78,6 +84,39 @@ Response:
 - `grounded` — the answer came from retrieved context.
 - `refused` — request blocked by guardrails or no relevant context found.
 
+### `POST /query/voice`
+
+Voice variant of `/query`. Send a recorded clip as `multipart/form-data`
+(`audio` file field, plus optional `top_k` / `session_id` / `request_id` form
+fields). The clip is transcribed (`TRANSCRIPTION_MODEL`, English/Urdu-hinted)
+and the transcript runs through the exact same guardrails, retrieval gate, and
+rate limits as a typed question:
+
+```bash
+curl -X POST http://127.0.0.1:8000/query/voice \
+  -F "audio=@question.webm;type=audio/webm" -F "session_id=abc123"
+```
+
+The response is the `/query` shape plus a `transcription` field so the UI can
+show what was heard. Uploads are capped at `MAX_AUDIO_BYTES` (default 10 MB).
+
+In the browser, record with `MediaRecorder` and post the blob:
+
+```js
+const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+const rec = new MediaRecorder(stream);
+const chunks = [];
+rec.ondataavailable = (e) => chunks.push(e.data);
+rec.onstop = async () => {
+  const form = new FormData();
+  form.append("audio", new Blob(chunks, { type: rec.mimeType }), "q.webm");
+  form.append("session_id", sessionId);
+  const res = await fetch("/query/voice", { method: "POST", body: form });
+  const { transcription, answer } = await res.json();
+};
+rec.start();            // …then rec.stop() when the mic button is tapped again
+```
+
 ### `GET /health`
 
 Returns service status and the document count.
@@ -121,6 +160,8 @@ All settings come from environment variables / `.env` (see `.env.example`):
 | `EMBEDDING_MODEL`  | `gemini-embedding-001` | Gemini embedding model                  |
 | `CHROMA_PATH`      | `./data/chroma`      | Persistent Chroma directory               |
 | `COLLECTION_NAME`  | `documents`          | Chroma collection name                    |
+| `TRANSCRIPTION_MODEL` | `gpt-4o-mini-transcribe` | Speech-to-text model for /query/voice |
+| `MAX_AUDIO_BYTES`  | `10000000`           | Upload cap for /query/voice               |
 | `TOP_K`            | `4`                  | Chunks retrieved per query                |
 | `MAX_DISTANCE`     | `0.75`               | Cosine-distance relevance cutoff          |
 | `SERVICE_API_KEY`  | — (auth off)         | If set, require `X-API-Key` header        |

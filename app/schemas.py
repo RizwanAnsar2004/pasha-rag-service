@@ -102,3 +102,12 @@ class QueryResponse(BaseModel):
         default=None, description="Why the request was refused, if applicable."
     )
     sources: list[SourceChunk] = Field(default_factory=list)
+
+
+class VoiceQueryResponse(QueryResponse):
+    """A /query/voice answer, plus what the service heard — echoed back so the
+    UI can show the user their transcribed question."""
+
+    transcription: str = Field(
+        default="", description="The transcript the answer was generated from."
+    )

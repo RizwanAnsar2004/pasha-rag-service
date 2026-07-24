@@ -106,6 +106,12 @@ def list_ids(where: dict | None = None) -> list[str]:
     return list(result.get("ids") or [])
 
 
+def list_meta(where: dict | None = None) -> list[dict]:
+    """Return stored metadata dicts, optionally filtered by a `where` clause."""
+    result = _collection().get(where=where, include=["metadatas"])
+    return [m or {} for m in (result.get("metadatas") or [])]
+
+
 def update_meta(doc_id: str, metadata: dict) -> None:
     """Update only the metadata of an existing document (no re-embedding).
 

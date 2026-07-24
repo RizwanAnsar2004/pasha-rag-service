@@ -13,6 +13,7 @@ import hashlib
 import html
 import logging
 import re
+from collections import Counter
 
 import httpx
 
@@ -304,6 +305,134 @@ def build_document(row: dict) -> Document:
 
 
 # --------------------------------------------------------------------------- #
+# Aggregate summary documents.
+#
+# Top-k retrieval only ever shows the model a handful of individual startup
+# profiles, so aggregate questions ("how many categories are there?", "how many
+# startups in Lahore?") can never be answered from per-row vectors. These
+# pre-computed roll-up documents put the totals themselves into the corpus.
+# --------------------------------------------------------------------------- #
+SUMMARY_ID_PREFIX = "startup-summary:"
+
+# One roll-up document per facet: (metadata column, id slug, plural phrasing,
+# singular phrasing). The phrasing is written into the document text, so it
+# should use the words people actually ask with.
+_SUMMARY_FACETS = [
+    ("primary_industry", "categories", "categories (industries / sectors)", "category"),
+    ("city", "cities", "cities", "city"),
+    ("nic_name", "incubation-centers", "incubation centers (NICs)", "incubation center"),
+    ("product_stage", "product-stages", "product stages", "product stage"),
+]
+
+_UUID_RE = re.compile(
+    r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.I
+)
+
+
+def _facet_value(meta: dict, col: str) -> str | None:
+    """A countable facet value, or None. Skips empties, the placeholder values
+    the corpus treats as missing (NULL / Other / None), and raw UUIDs that
+    leaked into text columns in a few source rows."""
+    val = str(meta.get(col) or "").strip()
+    if not val or val.lower() in {"null", "none", "other"} or _UUID_RE.match(val):
+        return None
+    return val
+
+
+def _summary_doc(slug: str, text: str) -> Document:
+    content_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return Document(
+        id=f"{SUMMARY_ID_PREFIX}{slug}",
+        text=text,
+        metadata={
+            "type": "startup_summary",
+            "facet": slug,
+            "content_hash": content_hash,
+        },
+    )
+
+
+def build_summary_documents(metas: list[dict]) -> list[Document]:
+    """Build the aggregate documents from startup vector metadata. Facets with
+    no usable values are omitted; an empty databank yields no documents."""
+    total = len(metas)
+    if total == 0:
+        return []
+
+    counts: dict[str, Counter] = {}
+    for col, slug, _, _ in _SUMMARY_FACETS:
+        counter: Counter = Counter()
+        for meta in metas:
+            val = _facet_value(meta, col)
+            if val:
+                counter[val] += 1
+        counts[slug] = counter
+
+    docs: list[Document] = []
+    for _, slug, plural, singular in _SUMMARY_FACETS:
+        counter = counts[slug]
+        if not counter:
+            continue
+        breakdown = "; ".join(f"{name}: {n}" for name, n in counter.most_common())
+        docs.append(
+            _summary_doc(
+                slug,
+                f"P@SHA Startup Databank summary — startup {plural}.\n"
+                f"The databank lists {total} startups. There are "
+                f"{len(counter)} distinct startup {plural}.\n"
+                f"Number of startups per {singular}: {breakdown}.\n"
+                f"This answers questions like: how many {plural} are there; "
+                f"how many startups in each {singular}; which {singular} has "
+                f"the most startups.",
+            )
+        )
+
+    docs.append(
+        _summary_doc(
+            "overview",
+            "P@SHA Startup Databank summary — overview.\n"
+            f"The startup databank contains {total} startups in total, spanning "
+            f"{len(counts['categories'])} categories (industries / sectors), "
+            f"{len(counts['cities'])} cities, and "
+            f"{len(counts['incubation-centers'])} incubation centers.\n"
+            "This answers questions like: how many startups are there in "
+            "total; how big is the startup databank.",
+        )
+    )
+    return docs
+
+
+def sync_summaries() -> dict:
+    """Rebuild the aggregate summary documents from the startup vectors
+    currently in the store. Called after every row/full sync so the totals
+    always match the corpus; unchanged summaries are skipped via content_hash
+    (no re-embed), and stale ones are pruned.
+
+    Returns counts: {upserted, skipped, deleted}."""
+    metas = vectorstore.list_meta(where={"type": "startup"})
+    docs = build_summary_documents(metas)
+
+    fresh: list[Document] = []
+    for doc in docs:
+        existing = vectorstore.get_meta(doc.id)
+        if existing and existing.get("content_hash") == doc.metadata["content_hash"]:
+            continue
+        fresh.append(doc)
+    if fresh:
+        vectorstore.ingest(fresh)
+
+    wanted = {doc.id for doc in docs}
+    stored = vectorstore.list_ids(where={"type": "startup_summary"})
+    stale = [sid for sid in stored if sid not in wanted]
+    deleted = vectorstore.delete_ids(stale)
+    return {
+        "upserted": len(fresh),
+        "skipped": len(docs) - len(fresh),
+        "deleted": deleted,
+    }
+
+
+# --------------------------------------------------------------------------- #
 # Sync operations.
 # --------------------------------------------------------------------------- #
 def sync_row(row_id: str) -> str:
@@ -312,6 +441,7 @@ def sync_row(row_id: str) -> str:
     if not rows:
         # Row is gone (deleted / never existed) → drop its vector.
         vectorstore.delete_ids([chroma_id(row_id)])
+        sync_summaries()
         return "delete"
 
     doc = build_document(rows[0])
@@ -324,6 +454,7 @@ def sync_row(row_id: str) -> str:
         return "skip"
 
     vectorstore.ingest([doc])
+    sync_summaries()
     return "upsert"
 
 
@@ -356,9 +487,11 @@ def sync_all() -> dict:
     orphans = [sid for sid in stored if sid not in seen_ids]
     deleted = vectorstore.delete_ids(orphans)
 
+    summaries = sync_summaries()
+
     logger.info(
-        "databank sync_all: upserted=%d skipped=%d deleted=%d rows=%d",
-        upserted, skipped, deleted, len(rows),
+        "databank sync_all: upserted=%d skipped=%d deleted=%d rows=%d summaries=%s",
+        upserted, skipped, deleted, len(rows), summaries,
     )
     return {
         "upserted": upserted,

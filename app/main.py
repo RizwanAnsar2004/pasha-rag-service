@@ -6,7 +6,17 @@ import logging
 import math
 import time
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, status
+from fastapi import (
+    Depends,
+    FastAPI,
+    File,
+    Form,
+    Header,
+    HTTPException,
+    Request,
+    UploadFile,
+    status,
+)
 from fastapi.responses import JSONResponse, Response
 from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
@@ -14,7 +24,7 @@ from slowapi.util import get_remote_address
 
 from . import databank, vectorstore
 from .config import get_settings
-from .rag import answer_question
+from .rag import FRIENDLY_REFUSAL, answer_question, transcribe_audio
 from .schemas import (
     DatabankEvent,
     DatabankSyncResponse,
@@ -22,6 +32,7 @@ from .schemas import (
     IngestResponse,
     QueryRequest,
     QueryResponse,
+    VoiceQueryResponse,
 )
 
 logger = logging.getLogger(__name__)
@@ -57,10 +68,18 @@ async def bind_session_id(request: Request) -> None:
 
     Never raises: a malformed body is the endpoint's problem to report, and the
     limiter just falls back to the IP bucket.
+
+    Handles both body shapes the service accepts: JSON (/query) and multipart
+    form (/query/voice). Starlette caches whichever one is parsed here, so the
+    endpoint's own body/File/Form parsing still works afterwards.
     """
     session_id: str | None = None
+    content_type = request.headers.get("content-type", "")
     try:
-        payload = await request.json()
+        if content_type.startswith(("multipart/form-data", "application/x-www-form-urlencoded")):
+            payload = dict(await request.form())
+        else:
+            payload = await request.json()
     except Exception:  # noqa: BLE001 - unparseable body, handled downstream
         payload = None
 
@@ -203,6 +222,71 @@ def query(request: Request, req: QueryRequest) -> QueryResponse:
         },
     )
     return answer_question(req.question, req.top_k)
+
+
+@app.post(
+    "/query/voice",
+    response_model=VoiceQueryResponse,
+    dependencies=[Depends(require_api_key), Depends(bind_session_id)],
+)
+# Same two buckets as /query — a voice question spends the same quota as a
+# typed one (slowapi counts each route's window separately, so the shared knob
+# names keep the *rates* aligned, not one combined counter).
+@limiter.limit(lambda: get_settings().query_rate_limit, key_func=_session_key)
+@limiter.limit(lambda: get_settings().query_ip_rate_limit, key_func=_ip_key)
+def query_voice(
+    request: Request,
+    audio: UploadFile = File(..., description="Recorded question (webm/ogg/mp3/wav)."),
+    top_k: int | None = Form(default=None, ge=1, le=20),
+    session_id: str | None = Form(default=None),
+    request_id: str | None = Form(default=None),
+) -> VoiceQueryResponse:
+    """Voice variant of /query: transcribe the clip, then run the exact same
+    guarded pipeline on the transcript. The transcript is echoed back so the UI
+    can display what was heard."""
+    settings = get_settings()
+    audio_bytes = audio.file.read()
+    if not audio_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Empty audio upload."
+        )
+    if len(audio_bytes) > settings.max_audio_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+            detail=f"Audio exceeds the {settings.max_audio_bytes} byte limit.",
+        )
+
+    try:
+        transcript = transcribe_audio(
+            audio_bytes, audio.filename, audio.content_type
+        )
+    except Exception as exc:  # noqa: BLE001 - surfaced as a gateway error
+        logger.exception("voice transcription failed")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Audio transcription failed.",
+        ) from exc
+
+    logger.info(
+        "voice query received",
+        extra={
+            "session_id": getattr(request.state, "session_id", None),
+            "request_id": (request_id or "")[:MAX_SESSION_ID_LEN] or None,
+        },
+    )
+
+    if not transcript:
+        return VoiceQueryResponse(
+            answer=FRIENDLY_REFUSAL,
+            grounded=False,
+            refused=True,
+            reason="No speech was recognized in the audio.",
+            sources=[],
+            transcription="",
+        )
+
+    result = answer_question(transcript, top_k)
+    return VoiceQueryResponse(**result.model_dump(), transcription=transcript)
 
 
 @app.post("/databank/event", dependencies=[Depends(require_api_key)])

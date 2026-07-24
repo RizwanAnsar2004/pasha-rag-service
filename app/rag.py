@@ -131,6 +131,31 @@ def _build_user_message(question: str, chunks: list[SourceChunk]) -> str:
     )
 
 
+# Bias the transcriber toward the domain vocabulary (P@SHA is otherwise heard
+# as "Pasha"/"passion") and toward the two languages the audience speaks, so
+# Urdu speech isn't mis-scripted into Hindi or another language.
+TRANSCRIPTION_PROMPT = (
+    "A spoken question to the P@SHA assistant, in English or Urdu. "
+    "P@SHA is the Pakistan Software Houses Association. Vocabulary: P@SHA, "
+    "membership, startup, databank, incubation, cohort, fintech, secretariat. "
+    "یہ سوال انگریزی یا اردو میں ہے۔"
+)
+
+
+def transcribe_audio(
+    audio_bytes: bytes, filename: str | None, content_type: str | None
+) -> str:
+    """Transcribe a recorded voice question to text. Returns "" when the model
+    hears no usable speech."""
+    settings = get_settings()
+    transcript = _client().audio.transcriptions.create(
+        model=settings.transcription_model,
+        file=(filename or "audio.webm", audio_bytes, content_type or "audio/webm"),
+        prompt=TRANSCRIPTION_PROMPT,
+    )
+    return (transcript.text or "").strip()
+
+
 @lru_cache(maxsize=1)
 def _client() -> OpenAI:
     settings = get_settings()

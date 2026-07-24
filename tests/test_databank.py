@@ -140,15 +140,19 @@ def synced(tmp_path, monkeypatch):
     vectorstore._client.cache_clear()
 
 
+def _startup_ids(vectorstore):
+    return vectorstore.list_ids(where={"type": "startup"})
+
+
 def test_sync_row_upsert_then_skip(synced):
     databank, vectorstore, monkeypatch = synced
     monkeypatch.setattr(databank, "_fetch_rows", lambda ids=None: [SAMPLE_ROW])
 
     assert databank.sync_row(SAMPLE_ROW["id"]) == "upsert"
-    assert vectorstore.count() == 1
+    assert len(_startup_ids(vectorstore)) == 1
     # Same content again → embedded text unchanged → skip (no re-embed).
     assert databank.sync_row(SAMPLE_ROW["id"]) == "skip"
-    assert vectorstore.count() == 1
+    assert len(_startup_ids(vectorstore)) == 1
 
 
 def test_sync_row_metadata_only_change_skips_embedding(synced):
@@ -174,9 +178,10 @@ def test_sync_row_missing_deletes_vector(synced):
     databank, vectorstore, monkeypatch = synced
     monkeypatch.setattr(databank, "_fetch_rows", lambda ids=None: [SAMPLE_ROW])
     databank.sync_row(SAMPLE_ROW["id"])
-    assert vectorstore.count() == 1
+    assert len(_startup_ids(vectorstore)) == 1
 
-    # Row now gone from Supabase → event re-sync removes the vector.
+    # Row now gone from Supabase → event re-sync removes the vector, and the
+    # now-empty databank leaves no summary docs behind either.
     monkeypatch.setattr(databank, "_fetch_rows", lambda ids=None: [])
     assert databank.sync_row(SAMPLE_ROW["id"]) == "delete"
     assert vectorstore.count() == 0
@@ -190,13 +195,85 @@ def test_sync_all_reconciles_orphans(synced):
     monkeypatch.setattr(databank, "_fetch_rows", lambda ids=None: [SAMPLE_ROW, other])
     res = databank.sync_all()
     assert res["upserted"] == 2
-    assert vectorstore.count() == 2
+    assert len(_startup_ids(vectorstore)) == 2
 
     # Second startup disappears → next full sync prunes its orphan vector.
     monkeypatch.setattr(databank, "_fetch_rows", lambda ids=None: [SAMPLE_ROW])
     res = databank.sync_all()
     assert res["deleted"] == 1
-    assert vectorstore.count() == 1
+    assert len(_startup_ids(vectorstore)) == 1
+
+
+# --------------------------- summary documents ------------------------------ #
+def test_build_summary_documents_counts_and_hygiene():
+    from app import databank
+
+    metas = [
+        {"primary_industry": "HealthTech", "city": "Karachi"},
+        {"primary_industry": "HealthTech", "city": "Lahore"},
+        {"primary_industry": "Fintech"},
+        # Placeholder / junk values must not become categories.
+        {"primary_industry": "Other"},
+        {"primary_industry": "41509457-8b90-4af5-949b-b620866ea5d4"},
+    ]
+    docs = {d.id: d for d in databank.build_summary_documents(metas)}
+
+    cat = docs["startup-summary:categories"]
+    assert cat.metadata["type"] == "startup_summary"
+    assert "2 distinct startup categories" in cat.text
+    assert "HealthTech: 2" in cat.text and "Fintech: 1" in cat.text
+    assert "Other" not in cat.text and "41509457" not in cat.text
+
+    assert "2 distinct startup cities" in docs["startup-summary:cities"].text
+    # No row carries a product stage or NIC → those facet docs are omitted.
+    assert "startup-summary:product-stages" not in docs
+    assert "startup-summary:incubation-centers" not in docs
+    assert "contains 5 startups in total" in docs["startup-summary:overview"].text
+
+    assert databank.build_summary_documents([]) == []
+
+
+def test_sync_all_builds_and_updates_summaries(synced):
+    databank, vectorstore, monkeypatch = synced
+
+    other = {**SAMPLE_ROW, "id": "22222222-2222-2222-2222-222222222222",
+             "startup_name": "Beta Co", "primary_industry": "Fintech"}
+    monkeypatch.setattr(databank, "_fetch_rows", lambda ids=None: [SAMPLE_ROW, other])
+    databank.sync_all()
+
+    def summary_text(slug):
+        result = vectorstore._collection().get(
+            ids=[f"startup-summary:{slug}"], include=["documents"]
+        )
+        docs = result.get("documents") or []
+        return docs[0] if docs else None
+
+    text = summary_text("categories")
+    assert "2 distinct startup categories" in text
+    assert "HealthTech: 1" in text and "Fintech: 1" in text
+
+    # A category change flows into the summary on the next sync.
+    changed = {**other, "primary_industry": "HealthTech"}
+    monkeypatch.setattr(databank, "_fetch_rows", lambda ids=None: [SAMPLE_ROW, changed])
+    databank.sync_all()
+    text = summary_text("categories")
+    assert "1 distinct startup categories" in text
+    assert "HealthTech: 2" in text and "Fintech" not in text
+
+
+def test_sync_summaries_skips_unchanged(synced):
+    databank, vectorstore, monkeypatch = synced
+    monkeypatch.setattr(databank, "_fetch_rows", lambda ids=None: [SAMPLE_ROW])
+    databank.sync_all()
+
+    # Corpus unchanged → every summary hash matches → no re-embedding.
+    def _boom(texts):
+        raise AssertionError("embedding should be skipped")
+
+    monkeypatch.setattr(vectorstore, "embed_documents", _boom)
+    res = databank.sync_summaries()
+    assert res["upserted"] == 0 and res["deleted"] == 0
+    assert res["skipped"] > 0
 
 
 def test_databank_event_routes_delete(synced):

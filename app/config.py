@@ -30,6 +30,15 @@ class Settings(BaseSettings):
         default="text-embedding-3-small", alias="EMBEDDING_MODEL"
     )
 
+    # --- Voice queries (/query/voice) ---
+    transcription_model: str = Field(
+        default="gpt-4o-mini-transcribe", alias="TRANSCRIPTION_MODEL"
+    )
+    # Upper bound on an uploaded voice clip. Opus/webm records at ~1 MB per
+    # minute, so this fits a multi-minute question while bounding what one
+    # request can make the service buffer.
+    max_audio_bytes: int = Field(default=10_000_000, alias="MAX_AUDIO_BYTES")
+
     # --- Chroma vector store ---
     chroma_path: str = Field(default="./data/chroma", alias="CHROMA_PATH")
     collection_name: str = Field(default="documents", alias="COLLECTION_NAME")
