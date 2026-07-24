@@ -73,6 +73,19 @@ QUESTIONS: list[tuple[str, str | None]] = [
     # --- industry ---
     ("What are Pakistan's IT export figures?", None),
     ("Why is Pakistan a good location for tech outsourcing?", "outsourcing"),
+    # --- startup hub (startups.pasha.org.pk) ---
+    ("What is the P@SHA Startup Hub?", "startups.pasha.org.pk"),
+    ("How do I get my startup listed in the directory?", None),
+    ("How long does the startup application review take?", "two weeks"),
+    ("Who chairs the P@SHA Startups & Entrepreneurship Committee?", "Usman Akbar"),
+    ("Who is on the startups and entrepreneurship committee?", "Amna Masood"),
+    ("How do I contact the Startup Hub team?", "startups@pasha.org.pk"),
+    ("How can I find mentors through the Hub?", None),
+    ("Are there upcoming events on the Startup Hub?", None),
+    # --- databank aggregates (answered from the summary documents) ---
+    ("How many startups are in the directory?", "2485"),
+    ("How many FinTech startups are in the P@SHA startup directory?", "109"),
+    ("Which city has the most startups?", "Islamabad"),
 ]
 
 # Must be refused: outside the corpus, or an injection attempt.
