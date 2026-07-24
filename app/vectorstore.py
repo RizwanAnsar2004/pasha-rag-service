@@ -79,6 +79,19 @@ def query(question_embedding: list[float], top_k: int) -> list[SourceChunk]:
     return chunks
 
 
+def get_chunks(where: dict) -> list[SourceChunk]:
+    """Fetch stored documents by a metadata `where` filter (no similarity
+    search). Distance is 0.0 — these are deliberate inclusions, not matches."""
+    result = _collection().get(where=where, include=["documents", "metadatas"])
+    ids = result.get("ids") or []
+    docs = result.get("documents") or []
+    metas = result.get("metadatas") or []
+    return [
+        SourceChunk(id=cid, text=text, metadata=meta or {}, distance=0.0)
+        for cid, text, meta in zip(ids, docs, metas)
+    ]
+
+
 def count() -> int:
     return _collection().count()
 
