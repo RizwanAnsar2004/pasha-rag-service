@@ -149,6 +149,41 @@ combined, because the HTML alone is not the whole site:
 page — the readable record of what was captured, since the vector store only
 ever holds chunks.
 
+## Scraping startups.pasha.org.pk (the Startup Hub)
+
+`scripts/scrape_startup_hub.py` builds the Startup Hub corpus — what the Hub is,
+the directory, applying and getting verified, the Startups & Entrepreneurship
+Committee, events and contact details. Same two phases:
+
+```bash
+python -m scripts.scrape_startup_hub                    # crawl -> data/pasha_startup_hub.json + data/hub_pages/
+python -m scripts.scrape_startup_hub --ingest           # crawl, then embed into Chroma
+python -m scripts.scrape_startup_hub --ingest --replace # …and prune Hub chunks the crawl no longer produces
+```
+
+The Hub is a Next.js app, so its server HTML is only part of the content. Three
+sources are combined:
+
+1. **Page HTML** — the seven public routes, chunked at 600 chars (half the
+   pasha.org.pk size: these are landing pages of many short unrelated sections,
+   and a bigger chunk averages them into one unfindable vector).
+2. **The page bundle** — the FAQ is an accordion whose collapsed answers never
+   reach the HTML, so the ten Q/A pairs are read from the JS chunk that defines
+   the component. They become one `hub_faq` document each.
+3. **The RSC flight payload** — the committee roster renders as unlabelled
+   cards but ships as JSON, which parses cleanly and lets the scraper keep the
+   public fields (name, role, organisation) and drop the members' emails.
+
+Startup profiles under `/directory/<slug>` are deliberately not crawled: those
+rows come from Supabase via `app/databank.py`, which is their source of truth.
+For the same reason the `/directory` listing grid is dropped — it is a stale
+copy of twelve of those rows plus a rounded total that contradicts the databank
+summaries.
+
+Documents are typed `hub_page` / `hub_faq`, so `scrape_site.py --replace`
+(which clears `webpage` vectors) and this script never delete each other's work.
+`data/hub_pages/*.txt` is the readable record of the crawl.
+
 ## Configuration
 
 All settings come from environment variables / `.env` (see `.env.example`):

@@ -10,12 +10,13 @@ is a Next.js app whose server HTML is only part of the story:
   * The committee roster renders as unlabelled cards, but the same records sit
     in the RSC flight payload as JSON — cleaner to parse, and it lets us drop
     the members' email addresses instead of embedding them (`fetch_committee`).
-  * Every page renders its content twice (the nav overlay repeats the shell),
-    so identical lines are collapsed per page.
+  * Every page renders its whole body twice, once inside the closed nav
+    overlay, so the second copy is cut off (`_undo_duplicate_render`).
 
 Startup profiles under /directory/<slug> are deliberately NOT crawled: those
 rows already reach the store from Supabase via `app.databank`, which is their
-source of truth.
+source of truth. The /directory listing grid is dropped for the same reason
+(`_trim_listing`).
 
 Documents are typed `hub_page` and `hub_faq`, which keeps them separate from the
 `webpage` vectors that `scripts.scrape_site --replace` deletes.
